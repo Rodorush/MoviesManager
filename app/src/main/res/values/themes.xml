@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.MoviesManager" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Base.Theme.MoviesManager" parent="Theme.Material3.DayNight.NoActionBar"/>
+    <style name="Theme.MoviesManager" parent="Base.Theme.MoviesManager" />
 </resources>
