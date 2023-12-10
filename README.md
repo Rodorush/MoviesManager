@@ -1,0 +1,2 @@
+# MoviesManager
+Projeto avaliativo para a disciplina de Desenvolvimento Android 1 - Prof. Pedro Northon Nobile do curso de Pós Graduação em Dispositivos Móveis. As especificações do projeto do projeto estão em MoviesManager.pdf
