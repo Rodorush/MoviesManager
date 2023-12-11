@@ -40,7 +40,7 @@ class MovieFragment : Fragment() {
                 durationEt.setText(movie.watched.toString())
                 watchedCb.isChecked = movie.watched == true
                 ratingEt.setText(movie.rating.toString())
-                genreEt.setText(movie.genre.name)
+                genreEt.setText(movie.genre.toString())
                 navigationArgs.editMovie.also { editMovie ->
                     nameEt.isEnabled = editMovie
                     releaseYearEt.isEnabled = editMovie
@@ -65,7 +65,7 @@ class MovieFragment : Fragment() {
                             Integer.parseInt(durationEt.text.toString()),
                             watchedCb.isChecked,
                             java.lang.Double.parseDouble(ratingEt.text.toString()),
-                            Genre.valueOf(genreEt.text.toString())
+                            genreEt.text.toString()
                         )
                     )
                 })

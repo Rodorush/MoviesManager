@@ -15,5 +15,5 @@ data class Movie (
     val duration: Int = 0,
     var watched: Boolean = false,
     val rating: Double,
-    val genre: Genre
+    val genre: String
 ) : Parcelable

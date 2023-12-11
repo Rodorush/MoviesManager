@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.rodorush.moviesmanager.R
 import br.com.rodorush.moviesmanager.databinding.FragmentMainBinding
+import br.com.rodorush.moviesmanager.controller.MainController
 import br.com.rodorush.moviesmanager.view.adapter.MovieAdapter
 import br.com.rodorush.moviesmanager.view.adapter.OnMovieClickListener
 import br.com.rodorush.moviesmanager.model.entity.Movie
@@ -41,6 +43,11 @@ class MainFragment : Fragment(), OnMovieClickListener {
         const val MOVIE_FRAGMENT_REQUEST_KEY = "MOVIE_FRAGMENT_REQUEST_KEY"
     }
 
+    // Controller
+    private val mainController: MainController by lazy {
+        MainController(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,9 +61,11 @@ class MainFragment : Fragment(), OnMovieClickListener {
                 movie?.also { receivedMovie ->
                     movieList.indexOfFirst { it.name == receivedMovie.name }.also { position ->
                         if (position != -1) {
+                            mainController.editMovie(receivedMovie)
                             movieList[position] = receivedMovie
                             moviesAdapter.notifyItemChanged(position)
                         } else {
+                            mainController.insertMovie(receivedMovie)
                             movieList.add(receivedMovie)
                             moviesAdapter.notifyItemInserted(movieList.lastIndex)
                         }
@@ -66,10 +75,11 @@ class MainFragment : Fragment(), OnMovieClickListener {
                 // Hiding soft keyboard
                 (context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
                     fmb.root.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS
+                    HIDE_NOT_ALWAYS
                 )
             }
         }
+        mainController.getMovies()
     }
 
     override fun onCreateView(
@@ -95,6 +105,7 @@ class MainFragment : Fragment(), OnMovieClickListener {
     override fun onMovieClick(position: Int) = navigateToMovieFragment(position, false)
 
     override fun onRemoveMovieMenuItemClick(position: Int) {
+        mainController.removeMovie(movieList[position])
         movieList.removeAt(position)
         moviesAdapter.notifyItemRemoved(position)
     }
@@ -104,6 +115,7 @@ class MainFragment : Fragment(), OnMovieClickListener {
     override fun onWatchedCheckBoxClick(position: Int, checked: Boolean) {
         movieList[position].apply {
             watched = checked
+            mainController.editMovie(this)
         }
     }
 
@@ -112,6 +124,14 @@ class MainFragment : Fragment(), OnMovieClickListener {
             navController.navigate(
                 MainFragmentDirections.actionMainFragmentToMovieFragment(it, editMovie)
             )
+        }
+    }
+
+    fun updateMovieList(movies: List<Movie>) {
+        movieList.clear()
+        movies.forEachIndexed { index, movie ->
+            movieList.add(movie)
+            moviesAdapter.notifyItemChanged(index)
         }
     }
 }
