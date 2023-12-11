@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.MovieFragment">
+
+    <EditText
+        android:id="@+id/nameEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/movie_name"
+        android:inputType="textCapWords"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/releaseYearEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/release_year"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameEt" />
+
+    <EditText
+        android:id="@+id/studioEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/studio"
+        android:inputType="textCapWords"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/releaseYearEt" />
+
+    <EditText
+        android:id="@+id/durationEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/duration"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/studioEt" />
+
+    <CheckBox
+        android:id="@+id/watchedCb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/watched"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/durationEt" />
+
+    <EditText
+        android:id="@+id/ratingEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/rating"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/watchedCb" />
+
+    <EditText
+        android:id="@+id/genreEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/genre"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ratingEt" />
+
+
+        <Button
+            android:id="@+id/saveBt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/genreEt" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

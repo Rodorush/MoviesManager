@@ -1,7 +1,6 @@
 package br.com.rodorush.moviesmanager.view
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import br.com.rodorush.moviesmanager.R
 import br.com.rodorush.moviesmanager.databinding.ActivityMainBinding
@@ -17,6 +16,5 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(amb.mainTb)
         supportActionBar?.title = getString(R.string.app_name)
-
     }
 }

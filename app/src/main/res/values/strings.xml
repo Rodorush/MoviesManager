@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Movies Manager</string>
+    <string name="add_movie">Add Movie</string>
+    <string name="remove_movie">Remove movie</string>
+    <string name="edit_movie">Edit movie</string>
+    <string name="movie_list">Movie List</string>
+    <string name="watched">Watched</string>
+    <string name="save">Save</string>
+    <string name="movie_details">Movie Details</string>
+    <string name="movie_name">Movie Name</string>
+    <string name="release_year">Release Year</string>
+    <string name="studio">Studio</string>
+    <string name="duration">Duration</string>
+    <string name="rating">Rating</string>
+    <string name="genre">Genre</string>
 </resources>
