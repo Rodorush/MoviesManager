@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".view.MovieFragment">
 
+    <TextView
+        android:id="@+id/nameTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/movie_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <EditText
         android:id="@+id/nameEt"
         android:layout_width="0dp"
@@ -14,7 +22,16 @@
         android:inputType="textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/nameTv"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/releaseYearTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/release_year"
+        app:layout_constraintTop_toBottomOf="@id/nameEt"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/releaseYearEt"
@@ -24,7 +41,16 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nameEt" />
+        app:layout_constraintTop_toBottomOf="@id/releaseYearTv"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/studioTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/studio"
+        app:layout_constraintTop_toBottomOf="@id/releaseYearEt"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/studioEt"
@@ -34,7 +60,16 @@
         android:inputType="textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/releaseYearEt" />
+        app:layout_constraintTop_toBottomOf="@id/studioTv"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/durationTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/duration"
+        app:layout_constraintTop_toBottomOf="@id/studioEt"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/durationEt"
@@ -44,7 +79,8 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studioEt" />
+        app:layout_constraintTop_toBottomOf="@id/durationTv"
+        android:importantForAutofill="no" />
 
     <CheckBox
         android:id="@+id/watchedCb"
@@ -55,6 +91,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/durationEt" />
 
+    <TextView
+        android:id="@+id/ratingTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rating"
+        app:layout_constraintTop_toBottomOf="@id/watchedCb"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <EditText
         android:id="@+id/ratingEt"
         android:layout_width="0dp"
@@ -63,18 +107,27 @@
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/watchedCb" />
+        app:layout_constraintTop_toBottomOf="@id/ratingTv"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/genreTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/genre"
+        app:layout_constraintTop_toBottomOf="@id/ratingEt"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/genreEt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/genre"
-        android:inputType="numberDecimal"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ratingEt" />
-
+        app:layout_constraintTop_toBottomOf="@id/genreTv"
+        android:importantForAutofill="no" />
 
         <Button
             android:id="@+id/saveBt"

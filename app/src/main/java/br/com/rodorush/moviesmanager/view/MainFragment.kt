@@ -20,6 +20,7 @@ import br.com.rodorush.moviesmanager.controller.MainController
 import br.com.rodorush.moviesmanager.view.adapter.MovieAdapter
 import br.com.rodorush.moviesmanager.view.adapter.OnMovieClickListener
 import br.com.rodorush.moviesmanager.model.entity.Movie
+import br.com.rodorush.moviesmanager.model.enumerator.ActionType
 
 class MainFragment : Fragment(), OnMovieClickListener {
     private lateinit var fmb: FragmentMainBinding
@@ -94,7 +95,7 @@ class MainFragment : Fragment(), OnMovieClickListener {
 
             addMovieFab.setOnClickListener {
                 navController.navigate(
-                    MainFragmentDirections.actionMainFragmentToMovieFragment(null, editMovie = false)
+                    MainFragmentDirections.actionMainFragmentToMovieFragment(ActionType.INSERT, null)
                 )
             }
         }
@@ -102,7 +103,7 @@ class MainFragment : Fragment(), OnMovieClickListener {
         return fmb.root
     }
 
-    override fun onMovieClick(position: Int) = navigateToMovieFragment(position, false)
+    override fun onMovieClick(position: Int) = navigateToMovieFragment(position, ActionType.VIEW)
 
     override fun onRemoveMovieMenuItemClick(position: Int) {
         mainController.removeMovie(movieList[position])
@@ -110,7 +111,7 @@ class MainFragment : Fragment(), OnMovieClickListener {
         moviesAdapter.notifyItemRemoved(position)
     }
 
-    override fun onEditMovieMenuItemClick(position: Int) = navigateToMovieFragment(position, true)
+    override fun onEditMovieMenuItemClick(position: Int) = navigateToMovieFragment(position, ActionType.EDIT)
 
     override fun onWatchedCheckBoxClick(position: Int, checked: Boolean) {
         movieList[position].apply {
@@ -119,10 +120,10 @@ class MainFragment : Fragment(), OnMovieClickListener {
         }
     }
 
-    private fun navigateToMovieFragment(position: Int, editMovie: Boolean) {
+    private fun navigateToMovieFragment(position: Int, actionType: ActionType) {
         movieList[position].also {
             navController.navigate(
-                MainFragmentDirections.actionMainFragmentToMovieFragment(it, editMovie)
+                MainFragmentDirections.actionMainFragmentToMovieFragment(actionType, it)
             )
         }
     }

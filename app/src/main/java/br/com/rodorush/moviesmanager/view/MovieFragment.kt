@@ -1,6 +1,7 @@
 package br.com.rodorush.moviesmanager.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -17,6 +18,7 @@ import br.com.rodorush.moviesmanager.model.entity.Genre
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.EXTRA_MOVIE
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.MOVIE_FRAGMENT_REQUEST_KEY
 import br.com.rodorush.moviesmanager.model.entity.Movie
+import br.com.rodorush.moviesmanager.model.enumerator.ActionType
 
 class MovieFragment : Fragment() {
     private lateinit var ftb: FragmentMovieBinding
@@ -31,26 +33,33 @@ class MovieFragment : Fragment() {
 
         ftb = FragmentMovieBinding.inflate(inflater, container, false)
 
-        val receivedMovie = navigationArgs.movie
-        receivedMovie?.also { movie ->
+        val receivedActionType = navigationArgs.actionType
+        receivedActionType.also { actionType ->
             with(ftb) {
-                nameEt.setText(movie.name)
-                releaseYearEt.setText(movie.releaseYear.toString())
-                studioEt.setText(movie.studio)
-                durationEt.setText(movie.watched.toString())
-                watchedCb.isChecked = movie.watched == true
-                ratingEt.setText(movie.rating.toString())
-                genreEt.setText(movie.genre.toString())
-                navigationArgs.editMovie.also { editMovie ->
-                    nameEt.isEnabled = editMovie
-                    releaseYearEt.isEnabled = editMovie
-                    studioEt.isEnabled = editMovie
-                    durationEt.isEnabled = editMovie
-                    watchedCb.isEnabled = editMovie
-//                    ratingEt.isEnabled = editMovie
-                    genreEt.isEnabled = editMovie
-                    saveBt.visibility = if (editMovie) VISIBLE else GONE
+                navigationArgs.movie?.also { movie ->
+                    nameEt.setText(movie.name)
+                    releaseYearEt.setText(movie.releaseYear.toString())
+                    studioEt.setText(movie.studio)
+                    durationEt.setText(movie.duration.toString())
+                    watchedCb.isChecked = movie.watched
+                    ratingEt.setText(movie.rating.toString())
+                    genreEt.setText(movie.genre)
                 }
+                Log.i("actionType", "actionType = $actionType")
+                nameTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
+                nameEt.isEnabled = actionType != ActionType.VIEW
+                releaseYearTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
+                releaseYearEt.isEnabled = actionType != ActionType.VIEW
+                studioTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
+                studioEt.isEnabled = actionType != ActionType.VIEW
+                durationTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
+                durationEt.isEnabled = actionType != ActionType.VIEW
+                watchedCb.isEnabled = actionType != ActionType.VIEW
+                ratingTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
+                ratingEt.isEnabled = actionType != ActionType.VIEW
+                genreTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
+                genreEt.isEnabled = actionType != ActionType.VIEW
+                saveBt.visibility = if (actionType != ActionType.VIEW) VISIBLE else GONE
             }
         }
 

@@ -9,7 +9,7 @@
         android:id="@+id/mainFragment"
         android:name="br.com.rodorush.moviesmanager.view.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_movieFragment"
             app:destination="@id/movieFragment" />
@@ -18,15 +18,14 @@
         android:id="@+id/movieFragment"
         android:name="br.com.rodorush.moviesmanager.view.MovieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie" >
+        tools:layout="@layout/fragment_movie">
         <argument
             android:name="movie"
-            app:argType="br.com.rodorush.moviesmanager.model.entity.Movie"
             android:defaultValue="@null"
+            app:argType="br.com.rodorush.moviesmanager.model.entity.Movie"
             app:nullable="true" />
         <argument
-            android:name="editMovie"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:name="actionType"
+            app:argType="br.com.rodorush.moviesmanager.model.enumerator.ActionType" />
     </fragment>
 </navigation>
