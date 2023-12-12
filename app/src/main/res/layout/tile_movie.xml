@@ -9,19 +9,53 @@
 
     <TextView
         android:id="@+id/nameTv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/watchedCb"
-        app:layout_constraintBottom_toBottomOf="@id/watchedCb"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/releaseYearTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1980"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/watchedCb"
+        app:layout_constraintBottom_toBottomOf="@id/watchedCb"
+        app:layout_constraintEnd_toStartOf="@id/genreTv"/>
+
+    <TextView
+        android:id="@+id/genreTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drama"
+        app:layout_constraintStart_toEndOf="@id/releaseYearTv"
+        app:layout_constraintTop_toTopOf="@id/watchedCb"
+        app:layout_constraintBottom_toBottomOf="@id/watchedCb"
+        app:layout_constraintEnd_toStartOf="@id/watchedTv"/>
+
+    <TextView
+        android:id="@+id/watchedTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Watched:"
+        app:layout_constraintTop_toTopOf="@id/watchedCb"
+        app:layout_constraintBottom_toBottomOf="@id/watchedCb"
+        app:layout_constraintEnd_toStartOf="@id/watchedCb"/>
 
     <CheckBox
         android:id="@+id/watchedCb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/nameTv" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/watchedCb"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
