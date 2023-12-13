@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -65,15 +66,34 @@ class MovieFragment : Fragment() {
 
         ftb.run {
             saveBt.setOnClickListener {
+                val movieName = nameEt.text.toString().trim()
+                val releaseYearText = releaseYearEt.text.toString().trim()
+                val genre = genreEt.text.toString().trim()
+
+                movieName.takeIf { it.isEmpty() }?.let {
+                    Toast.makeText(requireContext(), "Movie Name is required!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                releaseYearText.takeIf { it.isEmpty() }?.let {
+                    Toast.makeText(requireContext(), "Release Year is required!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                genre.takeIf { it.isEmpty() }?.let {
+                    Toast.makeText(requireContext(), "Genre is required!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 setFragmentResult(MOVIE_FRAGMENT_REQUEST_KEY, Bundle().apply {
                     putParcelable(
                         EXTRA_MOVIE, Movie(
                             nameEt.text.toString(),
                             Integer.parseInt(releaseYearEt.text.toString()),
                             studioEt.text.toString(),
-                            Integer.parseInt(durationEt.text.toString()),
+                            durationEt.text.toString().toIntOrNull() ?: 0,
                             watchedCb.isChecked,
-                            java.lang.Double.parseDouble(ratingEt.text.toString()),
+                            ratingEt.text.toString().toDoubleOrNull() ?: 0.0,
                             genreEt.text.toString()
                         )
                     )
