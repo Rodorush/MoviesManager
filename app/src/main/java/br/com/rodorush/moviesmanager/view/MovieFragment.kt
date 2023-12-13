@@ -11,18 +11,27 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import br.com.rodorush.moviesmanager.R
+import br.com.rodorush.moviesmanager.controller.MovieViewModel
 import br.com.rodorush.moviesmanager.databinding.FragmentMovieBinding
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.EXTRA_MOVIE
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.MOVIE_FRAGMENT_REQUEST_KEY
 import br.com.rodorush.moviesmanager.model.entity.Movie
 import br.com.rodorush.moviesmanager.model.enumerator.ActionType
+import kotlinx.coroutines.launch
 
 class MovieFragment : Fragment() {
     private lateinit var ftb: FragmentMovieBinding
     private val navigationArgs: MovieFragmentArgs by navArgs()
+
+    // ViewModel
+    private val movieViewModel: MovieViewModel by viewModels {
+        MovieViewModel.MovieViewModelFactory
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,39 +79,51 @@ class MovieFragment : Fragment() {
                 val genre = genreEt.text.toString().trim()
 
                 movieName.takeIf { it.isEmpty() }?.let {
-                    Toast.makeText(requireContext(), "Movie Name is required!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Movie Name is required!", Toast.LENGTH_SHORT)
+                        .show()
                     return@setOnClickListener
                 }
 
                 releaseYearText.takeIf { it.isEmpty() }?.let {
-                    Toast.makeText(requireContext(), "Release Year is required!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Release Year is required!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
 
                 genre.takeIf { it.isEmpty() }?.let {
-                    Toast.makeText(requireContext(), "Genre is required!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Genre is required!", Toast.LENGTH_SHORT)
+                        .show()
                     return@setOnClickListener
                 }
 
-//                if (!mainController.isMovieNameUnique(movieName)) {
-//                    Toast.makeText(requireContext(), "Movie with the same name already exists!", Toast.LENGTH_SHORT).show()
-//                    return@setOnClickListener
-//                }
+                lifecycleScope.launch {
+                    if (!movieViewModel.isMovieNameUnique(movieName)) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Movie with the same name already exists!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
+                    }
 
-                setFragmentResult(MOVIE_FRAGMENT_REQUEST_KEY, Bundle().apply {
-                    putParcelable(
-                        EXTRA_MOVIE, Movie(
-                            nameEt.text.toString(),
-                            Integer.parseInt(releaseYearEt.text.toString()),
-                            studioEt.text.toString(),
-                            durationEt.text.toString().toIntOrNull() ?: 0,
-                            watchedCb.isChecked,
-                            ratingEt.text.toString().toDoubleOrNull() ?: 0.0,
-                            genreEt.text.toString()
+                    setFragmentResult(MOVIE_FRAGMENT_REQUEST_KEY, Bundle().apply {
+                        putParcelable(
+                            EXTRA_MOVIE, Movie(
+                                nameEt.text.toString(),
+                                Integer.parseInt(releaseYearEt.text.toString()),
+                                studioEt.text.toString(),
+                                durationEt.text.toString().toIntOrNull() ?: 0,
+                                watchedCb.isChecked,
+                                ratingEt.text.toString().toDoubleOrNull() ?: 0.0,
+                                genreEt.text.toString()
+                            )
                         )
-                    )
-                })
-                findNavController().navigateUp()
+                    })
+                    findNavController().navigateUp()
+                }
             }
         }
 

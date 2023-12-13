@@ -47,6 +47,13 @@ class MovieViewModel(application: Application): ViewModel() {
         }
     }
 
+    suspend fun isMovieNameUnique(movieName: String): Boolean {
+        return CoroutineScope(Dispatchers.IO).run {
+            val existingMovie = movieDaoImpl.retrieveMovieByName(movieName)
+            existingMovie == null
+        }
+    }
+
     companion object {
         val MovieViewModelFactory = object: ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T =

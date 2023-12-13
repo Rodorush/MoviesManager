@@ -26,5 +26,5 @@ interface MovieDao {
     fun deleteMovie(movie: Movie)
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE name = :movieName LIMIT 1")
-    fun retrieveMovieByName(movieName: String): Movie?
+    suspend fun retrieveMovieByName(movieName: String): Movie?
 }
