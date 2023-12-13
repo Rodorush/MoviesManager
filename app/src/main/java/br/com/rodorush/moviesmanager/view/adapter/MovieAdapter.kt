@@ -62,7 +62,7 @@ class MovieAdapter(
                 nameTv.text = movie.name
                 releaseYear.text = movie.releaseYear.toString()
                 genre.text = movie.genre
-                watchedCb.isChecked = movie.watched == true
+                watchedCb.isChecked = movie.watched
             }
         }
     }

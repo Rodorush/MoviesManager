@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import br.com.rodorush.moviesmanager.R
 import br.com.rodorush.moviesmanager.databinding.FragmentMovieBinding
-import br.com.rodorush.moviesmanager.model.entity.Genre
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.EXTRA_MOVIE
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.MOVIE_FRAGMENT_REQUEST_KEY
 import br.com.rodorush.moviesmanager.model.entity.Movie
@@ -84,6 +83,11 @@ class MovieFragment : Fragment() {
                     Toast.makeText(requireContext(), "Genre is required!", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
+
+//                if (!mainController.isMovieNameUnique(movieName)) {
+//                    Toast.makeText(requireContext(), "Movie with the same name already exists!", Toast.LENGTH_SHORT).show()
+//                    return@setOnClickListener
+//                }
 
                 setFragmentResult(MOVIE_FRAGMENT_REQUEST_KEY, Bundle().apply {
                     putParcelable(
