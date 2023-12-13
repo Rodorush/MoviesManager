@@ -1,19 +1,26 @@
 package br.com.rodorush.moviesmanager.controller
 
+import android.app.Application
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.room.Room
 import br.com.rodorush.moviesmanager.model.database.MoviesManagerDatabase
 import br.com.rodorush.moviesmanager.model.entity.Movie
-import br.com.rodorush.moviesmanager.view.MainFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainController(private val mainFragment: MainFragment) {
+@Suppress("UNCHECKED_CAST")
+class MovieViewModel(application: Application): ViewModel() {
     private val movieDaoImpl = Room.databaseBuilder(
-        mainFragment.requireContext(),
+        application.applicationContext,
         MoviesManagerDatabase::class.java,
         MoviesManagerDatabase.MOVIES_MANAGER_DATABASE
     ).build().getMovieDao()
+
+    val moviesMld = MutableLiveData<List<Movie>>()
 
     fun insertMovie(movie: Movie) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -24,7 +31,7 @@ class MainController(private val mainFragment: MainFragment) {
     fun getMovies() {
         CoroutineScope(Dispatchers.IO).launch {
             val movies = movieDaoImpl.retrieveMovies()
-            mainFragment.updateMovieList(movies)
+            moviesMld.postValue(movies)
         }
     }
 
@@ -37,6 +44,13 @@ class MainController(private val mainFragment: MainFragment) {
     fun removeMovie(movie: Movie) {
         CoroutineScope(Dispatchers.IO).launch {
             movieDaoImpl.deleteMovie(movie)
+        }
+    }
+
+    companion object {
+        val MovieViewModelFactory = object: ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T =
+                MovieViewModel(checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])) as T
         }
     }
 }

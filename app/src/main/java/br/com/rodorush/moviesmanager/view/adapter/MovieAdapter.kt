@@ -17,6 +17,8 @@ class MovieAdapter(
     inner class MovieTileViewHolder(tileMovieBinding: TileMovieBinding) :
         RecyclerView.ViewHolder(tileMovieBinding.root) {
         val nameTv: TextView = tileMovieBinding.nameTv
+        val releaseYear: TextView = tileMovieBinding.releaseYearTv
+        val genre: TextView = tileMovieBinding.genreTv
         val watchedCb: CheckBox = tileMovieBinding.watchedCb
 
         init {
@@ -58,7 +60,9 @@ class MovieAdapter(
         movieList[position].let { movie ->
             with(holder) {
                 nameTv.text = movie.name
-                watchedCb.isChecked = movie.watched == true
+                releaseYear.text = movie.releaseYear.toString()
+                genre.text = movie.genre
+                watchedCb.isChecked = movie.watched
             }
         }
     }
