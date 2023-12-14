@@ -8,6 +8,7 @@ enum class Genre {
     Documentário,
     Drama,
     Fantasia,
+    Ficção,
     Romance,
     Terror
 }
