@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import br.com.rodorush.moviesmanager.R
 import br.com.rodorush.moviesmanager.controller.MovieViewModel
 import br.com.rodorush.moviesmanager.databinding.FragmentMovieBinding
+import br.com.rodorush.moviesmanager.model.entity.Genre
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.EXTRA_MOVIE
 import br.com.rodorush.moviesmanager.view.MainFragment.Companion.MOVIE_FRAGMENT_REQUEST_KEY
 import br.com.rodorush.moviesmanager.model.entity.Movie
@@ -42,6 +44,10 @@ class MovieFragment : Fragment() {
 
         ftb = FragmentMovieBinding.inflate(inflater, container, false)
 
+        val genreAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, Genre.values())
+        genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ftb.genreSpinner.adapter = genreAdapter
+
         val receivedActionType = navigationArgs.actionType
         receivedActionType.also { actionType ->
             with(ftb) {
@@ -52,9 +58,9 @@ class MovieFragment : Fragment() {
                     durationEt.setText(movie.duration.toString())
                     watchedCb.isChecked = movie.watched
                     ratingBar.rating = (movie.rating / 2.0).toFloat()
-                    genreEt.setText(movie.genre)
-                }
-                Log.i("actionType", "actionType = $actionType")
+                    val genreList = Genre.entries.map { it.name }
+                    val genrePosition = genreList.indexOf(movie.genre)
+                    genreSpinner.setSelection(genrePosition)                }
                 nameTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
                 nameEt.isEnabled = actionType == ActionType.INSERT
                 releaseYearTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
@@ -67,7 +73,7 @@ class MovieFragment : Fragment() {
                 ratingTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
                 ratingBar.isEnabled = actionType != ActionType.VIEW
                 genreTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
-                genreEt.isEnabled = actionType != ActionType.VIEW
+                genreSpinner.isEnabled = actionType != ActionType.VIEW
                 saveBt.visibility = if (actionType != ActionType.VIEW) VISIBLE else GONE
             }
         }
@@ -76,7 +82,7 @@ class MovieFragment : Fragment() {
             saveBt.setOnClickListener {
                 val movieName = nameEt.text.toString().trim()
                 val releaseYearText = releaseYearEt.text.toString().trim()
-                val genre = genreEt.text.toString().trim()
+                val selectedGenre = (genreSpinner.selectedItem as Genre).name
 
                 movieName.takeIf { it.isEmpty() }?.let {
                     Toast.makeText(requireContext(), "Movie Name is required!", Toast.LENGTH_SHORT)
@@ -93,11 +99,11 @@ class MovieFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                genre.takeIf { it.isEmpty() }?.let {
-                    Toast.makeText(requireContext(), "Genre is required!", Toast.LENGTH_SHORT)
-                        .show()
-                    return@setOnClickListener
-                }
+//                genre.takeIf { it.isEmpty() }?.let {
+//                    Toast.makeText(requireContext(), "Genre is required!", Toast.LENGTH_SHORT)
+//                        .show()
+//                    return@setOnClickListener
+//                }
 
                 lifecycleScope.launch {
                     if (!movieViewModel.isMovieNameUnique(movieName) && navigationArgs.actionType == ActionType.INSERT) {
@@ -118,7 +124,7 @@ class MovieFragment : Fragment() {
                                 durationEt.text.toString().toIntOrNull() ?: 0,
                                 watchedCb.isChecked,
                                 ratingBar.rating.toDouble() * 2.0,
-                                genreEt.text.toString()
+                                selectedGenre
                             )
                         )
                     })

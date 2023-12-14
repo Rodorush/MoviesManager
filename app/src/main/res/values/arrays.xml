@@ -1,0 +1,13 @@
+<resources>
+    <array name="genre_array">
+        <item>Ação</item>
+        <item>Animação</item>
+        <item>Aventura</item>
+        <item>Comédia</item>
+        <item>Documentário</item>
+        <item>Drama</item>
+        <item>Fantasia</item>
+        <item>Romance</item>
+        <item>Terror</item>
+    </array>
+</resources>
