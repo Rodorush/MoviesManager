@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -128,6 +129,11 @@ class MainFragment : Fragment(), OnMovieClickListener {
             movieViewModel.editMovie(this)
         }
     }
+
+//    override fun onRatingBarClick(position: Int, rating: Float) {
+//        val convertedRating = rating * 5.0
+//        Toast.makeText(requireContext(), "Rating: $convertedRating", Toast.LENGTH_SHORT).show()
+//    }
 
     private fun navigateToMovieFragment(position: Int, actionType: ActionType) {
         movieList[position].also {

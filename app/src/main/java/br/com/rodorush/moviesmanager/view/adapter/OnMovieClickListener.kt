@@ -5,5 +5,5 @@ interface OnMovieClickListener {
     fun onRemoveMovieMenuItemClick(position: Int)
     fun onEditMovieMenuItemClick(position: Int)
     fun onWatchedCheckBoxClick(position: Int, checked: Boolean)
-
+//    fun onRatingBarClick(position: Int, rating: Float)
 }

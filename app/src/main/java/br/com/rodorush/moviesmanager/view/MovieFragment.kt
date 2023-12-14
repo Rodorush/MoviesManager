@@ -51,12 +51,12 @@ class MovieFragment : Fragment() {
                     studioEt.setText(movie.studio)
                     durationEt.setText(movie.duration.toString())
                     watchedCb.isChecked = movie.watched
-                    ratingEt.setText(movie.rating.toString())
+                    ratingBar.rating = (movie.rating / 2.0).toFloat()
                     genreEt.setText(movie.genre)
                 }
                 Log.i("actionType", "actionType = $actionType")
                 nameTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
-                nameEt.isEnabled = actionType != ActionType.VIEW
+                nameEt.isEnabled = actionType == ActionType.INSERT
                 releaseYearTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
                 releaseYearEt.isEnabled = actionType != ActionType.VIEW
                 studioTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
@@ -65,7 +65,7 @@ class MovieFragment : Fragment() {
                 durationEt.isEnabled = actionType != ActionType.VIEW
                 watchedCb.isEnabled = actionType != ActionType.VIEW
                 ratingTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
-                ratingEt.isEnabled = actionType != ActionType.VIEW
+                ratingBar.isEnabled = actionType != ActionType.VIEW
                 genreTv.visibility = if (actionType != ActionType.INSERT) VISIBLE else GONE
                 genreEt.isEnabled = actionType != ActionType.VIEW
                 saveBt.visibility = if (actionType != ActionType.VIEW) VISIBLE else GONE
@@ -100,7 +100,7 @@ class MovieFragment : Fragment() {
                 }
 
                 lifecycleScope.launch {
-                    if (!movieViewModel.isMovieNameUnique(movieName)) {
+                    if (!movieViewModel.isMovieNameUnique(movieName) && navigationArgs.actionType == ActionType.INSERT) {
                         Toast.makeText(
                             requireContext(),
                             "Movie with the same name already exists!",
@@ -117,7 +117,7 @@ class MovieFragment : Fragment() {
                                 studioEt.text.toString(),
                                 durationEt.text.toString().toIntOrNull() ?: 0,
                                 watchedCb.isChecked,
-                                ratingEt.text.toString().toDoubleOrNull() ?: 0.0,
+                                ratingBar.rating.toDouble() * 2.0,
                                 genreEt.text.toString()
                             )
                         )

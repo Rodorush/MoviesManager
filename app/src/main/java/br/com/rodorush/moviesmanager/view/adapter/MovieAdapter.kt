@@ -3,6 +3,7 @@ package br.com.rodorush.moviesmanager.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ class MovieAdapter(
         val releaseYear: TextView = tileMovieBinding.releaseYearTv
         val genre: TextView = tileMovieBinding.genreTv
         val watchedCb: CheckBox = tileMovieBinding.watchedCb
+        val ratingBar: RatingBar = tileMovieBinding.ratingBar
 
         init {
             tileMovieBinding.apply {
@@ -41,6 +43,9 @@ class MovieAdapter(
                     setOnClickListener {
                         onMovieClickListener.onMovieClick(adapterPosition)
                     }
+//                    ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
+//                        onMovieClickListener.onRatingBarClick(adapterPosition, rating)
+//                    }
                 }
                 watchedCb.run {
                     setOnClickListener {
@@ -63,6 +68,7 @@ class MovieAdapter(
                 releaseYear.text = movie.releaseYear.toString()
                 genre.text = movie.genre
                 watchedCb.isChecked = movie.watched
+                ratingBar.rating = (movie.rating / 2.0).toFloat()
             }
         }
     }
