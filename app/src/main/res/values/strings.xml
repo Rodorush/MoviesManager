@@ -13,4 +13,6 @@
     <string name="duration">Duration</string>
     <string name="rating">Rating</string>
     <string name="genre">Genre</string>
+    <string name="sort_by_name">Sort by Name</string>
+    <string name="sort_by_rating">Sort by Rating</string>
 </resources>

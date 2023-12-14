@@ -1,9 +1,14 @@
 package br.com.rodorush.moviesmanager.view
 
+import MovieDiffCallback
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -15,6 +20,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.rodorush.moviesmanager.controller.MovieViewModel
 import br.com.rodorush.moviesmanager.R
@@ -23,6 +29,7 @@ import br.com.rodorush.moviesmanager.view.adapter.MovieAdapter
 import br.com.rodorush.moviesmanager.view.adapter.OnMovieClickListener
 import br.com.rodorush.moviesmanager.model.entity.Movie
 import br.com.rodorush.moviesmanager.model.enumerator.ActionType
+import br.com.rodorush.moviesmanager.model.enumerator.SortType
 
 class MainFragment : Fragment(), OnMovieClickListener {
     private lateinit var fmb: FragmentMainBinding
@@ -51,37 +58,13 @@ class MainFragment : Fragment(), OnMovieClickListener {
         MovieViewModel.MovieViewModelFactory
     }
 
+    private var currentSortType: SortType = SortType.BY_NAME
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
-        setFragmentResultListener(MOVIE_FRAGMENT_REQUEST_KEY) { requestKey, bundle ->
-            if (requestKey == MOVIE_FRAGMENT_REQUEST_KEY) {
-                val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    bundle.getParcelable(EXTRA_MOVIE, Movie::class.java)
-                } else {
-                    bundle.getParcelable(EXTRA_MOVIE)
-                }
-                movie?.also { receivedMovie ->
-                    movieList.indexOfFirst { it.name == receivedMovie.name }.also { position ->
-                        if (position != -1) {
-                            movieViewModel.editMovie(receivedMovie)
-                            movieList[position] = receivedMovie
-                            moviesAdapter.notifyItemChanged(position)
-                        } else {
-                            movieViewModel.insertMovie(receivedMovie)
-                            movieList.add(receivedMovie)
-                            moviesAdapter.notifyItemInserted(movieList.lastIndex)
-                        }
-                    }
-                }
-
-                // Hiding soft keyboard
-                (context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                    fmb.root.windowToken,
-                    HIDE_NOT_ALWAYS
-                )
-            }
-        }
         movieViewModel.moviesMld.observe(requireActivity()) { movies ->
             movieList.clear()
             movies.forEachIndexed { index, movie ->
@@ -89,6 +72,12 @@ class MainFragment : Fragment(), OnMovieClickListener {
                 moviesAdapter.notifyItemChanged(index)
             }
         }
+
+//        movieViewModel.moviesMld.observe(requireActivity()) { movies ->
+//            movieList.clear()
+//            movieList.addAll(getSortedMovies())
+//            moviesAdapter.notifyDataSetChanged()
+//        }
 
         movieViewModel.getMovies()
     }
@@ -107,6 +96,35 @@ class MainFragment : Fragment(), OnMovieClickListener {
                 navController.navigate(
                     MainFragmentDirections.actionMainFragmentToMovieFragment(ActionType.INSERT, null)
                 )
+            }
+
+            setFragmentResultListener(MOVIE_FRAGMENT_REQUEST_KEY) { requestKey, bundle ->
+                if (requestKey == MOVIE_FRAGMENT_REQUEST_KEY) {
+                    val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        bundle.getParcelable(EXTRA_MOVIE, Movie::class.java)
+                    } else {
+                        bundle.getParcelable(EXTRA_MOVIE)
+                    }
+                    movie?.also { receivedMovie ->
+                        movieList.indexOfFirst { it.name == receivedMovie.name }.also { position ->
+                            if (position != -1) {
+                                movieViewModel.editMovie(receivedMovie)
+                                movieList[position] = receivedMovie
+                                moviesAdapter.notifyItemChanged(position)
+                            } else {
+                                movieViewModel.insertMovie(receivedMovie)
+                                movieList.add(receivedMovie)
+                                moviesAdapter.notifyItemInserted(movieList.lastIndex)
+                            }
+                        }
+                    }
+
+                    // Hiding soft keyboard
+                    (context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                        fmb.root.windowToken,
+                        HIDE_NOT_ALWAYS
+                    )
+                }
             }
         }
 
@@ -142,4 +160,43 @@ class MainFragment : Fragment(), OnMovieClickListener {
             )
         }
     }
+
+    private fun getSortedMovies(): List<Movie> {
+        return when (currentSortType) {
+            SortType.BY_NAME -> movieList.sortedBy { it.name }
+            SortType.BY_RATING -> movieList.sortedByDescending { it.rating }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    @Deprecated("Deprecated in Java")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sortByName -> {
+                currentSortType = SortType.BY_NAME
+                val sortedMovies = getSortedMovies()
+                val diffResult = DiffUtil.calculateDiff(MovieDiffCallback(movieList, sortedMovies))
+                movieList.clear()
+                movieList.addAll(sortedMovies)
+                diffResult.dispatchUpdatesTo(moviesAdapter)
+                true
+            }
+            R.id.sortByRating -> {
+                currentSortType = SortType.BY_RATING
+                val sortedMovies = getSortedMovies()
+                val diffResult = DiffUtil.calculateDiff(MovieDiffCallback(movieList, sortedMovies))
+                movieList.clear()
+                movieList.addAll(sortedMovies)
+                diffResult.dispatchUpdatesTo(moviesAdapter)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 }
